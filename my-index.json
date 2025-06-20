@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "index": {
+      "knn": true
+    }
+  },
+  "mappings": {
+    "properties": {
+      "vector_field": {
+        "type": "knn_vector",
+        "dimension": 1536
+      },
+      "text": {
+        "type": "text",
+        "analyzer": "standard"
+      }
+    }
+  }
+}
