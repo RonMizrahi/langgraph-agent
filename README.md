@@ -1,83 +1,52 @@
 
 # LangGraph Agent Project
 
-This project is an end-to-end agent framework built using [LangGraph](https://github.com/langchain-ai/langgraph). It is designed to demonstrate how to construct, configure, and run a powerful AI agent pipeline, including Retrieval-Augmented Generation (RAG) as a major component.
+This project demonstrates two main capabilities:
 
-## Major Sections
+## 1. Retrieval-Augmented Generation (RAG)
+- Uses OpenSearch as a vector store for document indexing and retrieval.
+- Employs Azure OpenAI for generating embeddings of your documents.
+- Retrieves relevant documents directly from OpenSearch to ground and enhance agent responses (no other vector store is used).
+- Example workflow: You provide a query, the system fetches semantically similar documents from OpenSearch, and the agent uses these to generate a more informed answer.
 
-### 1. Retrieval-Augmented Generation (RAG)
-RAG is a core part of this agent, enabling the agent to retrieve relevant information from a vector database (OpenSearch) and use it to enhance responses. The RAG pipeline uses OpenSearch as a vector store and Azure OpenAI for embeddings.
+## 2. React Agent with MCP Tools
+- Implements a React-style agent using LangGraph and LangChain frameworks.
+- Integrates MCP tools (e.g., math, weather) as callable tools, allowing the agent to perform actions or answer questions using external APIs or logic.
+- The agent can reason step-by-step, calling tools as needed to solve complex queries.
 
-#### Features
-* Store and retrieve vector embeddings in OpenSearch
-* Use Azure OpenAI for text embedding
-* Simple Python interface for querying relevant documents
+## Quick Start
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Configure environment variables in `.env` (see `.env.example`).
+   - You will need your Azure OpenAI credentials and OpenSearch connection details.
+3. Start OpenSearch (for RAG):
+   ```bash
+   docker-compose up -d
+   ```
+4. Run the RAG example:
+   ```bash
+   python rag-opensearch.py
+   ```
+   - This will index documents (if not already indexed) and allow you to query using retrieval-augmented generation.
 
-#### Requirements
-* Python 3.8+
-* Docker (for running OpenSearch and OpenSearch Dashboards)
+## How RAG Works
+- Documents are embedded using Azure OpenAI and stored in OpenSearch.
+- When you ask a question, the system retrieves the most relevant documents from OpenSearch using vector similarity.
+- The agent uses these documents to generate a grounded, context-aware response.
 
-#### Setup for RAG
+## How the React Agent Works
+- The agent uses LangGraph to manage reasoning steps and tool calls.
+- MCP tools are integrated as callable functions, so the agent can perform calculations, fetch weather, or other tasks as needed.
 
-1. **Clone the repository**
-    ```bash
-    git clone <your-repo-url>
-    cd langgraph-agent
-    ```
-2. **Install Python dependencies**
-    ```bash
-    pip install -r requirements.txt
-    ```
-3. **Configure Environment Variables**
-    Copy `.env.example` to `.env` and fill in your Azure OpenAI and OpenSearch details:
-    ```bash
-    cp .env.example .env
-    ```
-    Edit `.env` and set:
-    - `AZURE_OPENAI_API_KEY`
-    - `AZURE_OPENAI_ENDPOINT`
-    - `OPENSEARCH_URL`
-4. **Start OpenSearch and Dashboards (UI)**
-    ```bash
-    docker-compose up -d
-    ```
-    - OpenSearch: [https://localhost:9200](https://localhost:9200)
-    - Dashboards UI: [http://localhost:5601](http://localhost:5601)
-      - Default username: `admin`, password: `admin`
-5. **Run the RAG Example**
-    ```bash
-    python rag-opensearch.py
-    ```
-    Enter your query when prompted. The script will print the most relevant documents from OpenSearch.
-
-#### File Overview (RAG)
-* `rag-opensearch.py`: Main script for RAG retrieval
-* `requirements.txt`: Python dependencies
-* `docker-compose.yml`: OpenSearch and Dashboards setup
-* `.env.example`: Example environment variables
-* `my-index.json`: Example OpenSearch index mapping for vector search
-
-#### Index Mapping
-The file `my-index.json` provides a minimal example of an OpenSearch index mapping suitable for vector search with LangChain. It defines:
-- `vector_field`: type `knn_vector`, dimension 1536 (this is the default field name that the LangChain API expects for vector search)
-- `text`: type `text`, analyzer `standard`
-
-If you use a different field name for your vector, you must specify it explicitly in your code. By default, LangChain looks for a field named `vector_field`.
+## File Overview
+- `rag-opensearch.py`: RAG retrieval example
+- `agent/agent.py`: React agent with MCP tools
+- `agent/tools.py`: MCP tool integration
+- `requirements.txt`: Dependencies
 
 ---
-
-## Other Sections
-
-This project is designed to be modular. Additional agent capabilities, tools, and workflows can be added as new sections. See future updates for more features and agent logic.
-
-## Notes
-- This setup disables OpenSearch security for local development. Do not use in production as-is.
-- For production, enable security and use secure credentials.
-
-## References
-- [OpenSearch Documentation](https://opensearch.org/docs/)
-- [LangChain Documentation](https://python.langchain.com/)
-- [LangGraph Documentation](https://github.com/langchain-ai/langgraph)
-- [Azure OpenAI Documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/)
+For more, see code comments and each module's docstrings.
 
 

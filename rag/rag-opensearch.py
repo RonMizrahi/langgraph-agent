@@ -1,5 +1,6 @@
 from langchain_openai import AzureOpenAIEmbeddings
 from langchain_community.vectorstores import OpenSearchVectorSearch
+from langchain.tools import tool
 
 index_name = "langchain"
 
@@ -16,7 +17,7 @@ vectorestore = OpenSearchVectorSearch(
     opensearch_url="https://<your-opensearch-endpoint>:9200",
 )
 
-
+#@tool - Can be a tool for langgraph agents
 def retrieve(query: str) -> list:
     """
     Retrieve documents from OpenSearch based on the query.
